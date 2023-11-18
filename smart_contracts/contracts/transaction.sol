@@ -31,9 +31,10 @@ contract Transactions {
 
         emit Transfer(_from, _to, _amount, _message, block.timestamp, keyword);
     }
-
+    // Transaction getter function
     // @dev Return Transaction
     function getAllTransactions() public view returns(TransferStruct[] memory) {
+        return transactions;
 
     }
 
