@@ -1,23 +1,15 @@
 const main = async () => {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const Transactions = await hre.ethers.getContractFactory("Transactions");
+ const transactions = await Transactions.deploy();
 
-  const lockedAmount = hre.ethers.parseEther("0.001");
 
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
 
-  await lock.waitForDeployment();
+  await transactions.deployed();
 
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  console.log("Transaction deployed to " + transactions.address);
 }
 
-const runMain = aync () => {
+const runMain = async () => {
   try {
     await main();
     process.exit(0);
@@ -25,6 +17,7 @@ const runMain = aync () => {
     console.log(error)
     process.exit(1);
 
-  }
+  };
 
 }
+runMain();
