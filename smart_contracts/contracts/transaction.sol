@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
 contract Transactions {
     uint256 transactionCount;
 
-    event Transfer (address _from, address _to, uint amount, string message, uint256 timestamp, string keyword);
+    event Transfer (address from, address _to, uint amount, string message, uint256 timestamp, string keyword);
 
     struct TransferStruct {
         address from;
@@ -20,17 +20,12 @@ contract Transactions {
 
     TransferStruct[] transactions;
 
-    // Checks if address is correct
-    modifier fromAccount(address from) {
-        require(msg.sender == from);
-        _;
-    }
 
-    function addToBlockChain(address payable _from, address payable _to, uint _amount, string memory _message, string memory keyword) fromAccount(_from) public {
+    function addToBlockChain(address payable _to, uint _amount, string memory _message, string memory keyword) public {
         transactionCount += 1;
-        transactions.push(TransferStruct(_from, _to, _amount, _message, block.timestamp, keyword));
+        transactions.push(TransferStruct(msg.sender, _to, _amount, _message, block.timestamp, keyword));
 
-        emit Transfer(_from, _to, _amount, _message, block.timestamp, keyword);
+        emit Transfer(msg.sender, _to, _amount, _message, block.timestamp, keyword);
     }
 
 
