@@ -1,34 +1,33 @@
 import React, { useEffect, useState} from 'react';
 import { ethers } from 'ethers';
-
 import { contractAbi, contractAddress  } from '../utils/constants';
 
 export const TransactionContext = React.createContext();
 
 const { ethereum } = window;
 
-
 const getEthereumContract = () => {
-    const provider = new ethers.providers.Web3provider(ethereum)
-    const signer = provider.getSigner();
-    const transactionContract = new ethers.Contract(contractAddress, contractAbi)
+  const provider = new ethers.BrowserProvider(ethereum);
+  const signer = provider.getSigner();
+  const transactionsContract = new ethers.Contract(contractAddress, contractAbi, signer);
 
-    console.log({
-        provider,
-        signer,
-        transactionContract
-    }
-    );
-}
+  console.log(
+    provider,
+    signer,
+    transactionsContract
+  )
+
+  return transactionsContract;
+};
 
 export const TransactionProvider = ({ children }) => {
     const [currentAccount, setCurrentAccount] = useState("")
-    // Testing setting from address
+
 
     const [formData, setFormData] = useState({addressTo: "", amount: "", keyword: "", message: ""})
 
     const handleChange = (e, name) => {
-        setFormData((prevState) => ({...prevState, [name]: e.target.value}))
+        setFormData((prevState) => ({ ...prevState, [name]: e.target.value }))
 
     }
 
@@ -38,10 +37,10 @@ export const TransactionProvider = ({ children }) => {
 
             const accounts = await ethereum.request({method: "eth_accounts"});
 
-            console.log(accounts)
+
     
             if(accounts.length) {
-                setCurrentAccount(accounts[0])
+                setCurrentAccount(accounts[0]);
     
                 // get all Transactions
             }else {
@@ -62,19 +61,21 @@ export const TransactionProvider = ({ children }) => {
             setCurrentAccount(accounts[0]);
 
         }catch(error) {
-
-            console.log(error)
-            throw new Error('No ethereum object')
+            console.log(error);
+            throw new Error('No ethereum object');
         }
     }
 
     const sendTransaction = async () => {
         try {
-            if(!ethereum) return(alert("Please Install Metamask"))
+            if(!ethereum) return(alert("Please Install Metamask"));
+
+            const {  addressTo, amount, keyword, message} = formData;
+            getEthereumContract();
+        }catch(error) {
+           console.log(error);
+
             
-        } catch (error) {
-            console.log(error)
-            throw new Error('No ethereum object')
         }
     }
     useEffect(() => {

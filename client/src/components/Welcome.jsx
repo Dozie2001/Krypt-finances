@@ -6,9 +6,7 @@ import { BsInfoCircle } from 'react-icons/bs';
 import { TransactionContext } from '../context/TransactionContext';
 import { Loader } from './';
 // Remove later
-const handleChange = () => {
 
-}
 const Input = ({ placeholder, name, type, value, handleChange }) => (
     <input
       placeholder={placeholder}
@@ -25,11 +23,12 @@ const Welcome = () => {
     const { connectWallet, currentAccount, formData, sendTransaction, handleChange } = useContext(TransactionContext);
 
     // experimenting with thre from account
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
         const {  addressTo, amount, keyword, message} = formData;
         e.preventDefault();
 
-        if(!addressTo || !amount || keyword || !message) return;
+        if(!addressTo || !amount || !keyword || !message) return;
+        
         sendTransaction();
     }
     return (
